@@ -45,6 +45,51 @@ Router.get("/candidates", jwtverify, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /vote/count:
+ *   get:
+ *     summary: Get candidate vote count
+ *     description: Returns a list of candidates with their vote counts. Requires JWT authentication.
+ *     tags:
+ *       - Candidates
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of candidates and their vote counts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   candidatename:
+ *                     type: string
+ *                   votes:
+ *                     type: integer
+ *       401:
+ *         description: Unauthorized - JWT token is missing or invalid
+ *       500:
+ *         description: Internal server error
+ */
+Router.get("/count", jwtverify, async (req, res) => {
+    try {
+        const candidates = await cendidents.find();
+
+        const results = candidates.map(candidate => ({
+            candidatename: candidate.name,
+            votes: candidate.votecount
+        }));
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Internal server error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 /**
  * @swagger

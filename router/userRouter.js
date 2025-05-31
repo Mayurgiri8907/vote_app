@@ -76,6 +76,23 @@ Router.post('/singup',usersingupcreateheandler());
 
 Router.post('/singin',userloginheandler());
 
+/**
+ * @swagger
+ * /user/logout:
+ *   get:
+ *     summary: Logout user
+ *     description: Clears the authentication token cookie to log the user out.
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
 Router.get("/logout",function(req,res){
     res.cookie("token", "");
     res.status(200).send('logout successfully...');
